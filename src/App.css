@@ -1,0 +1,11 @@
+.crypto-icon {
+  width: 20px;
+  height: 20px;
+  margin: 0 3px 0 0;
+}
+
+.main-div-with-icon {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}

@@ -4,7 +4,6 @@ import axios from "axios";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import "ag-grid-community/dist/styles/ag-grid.css";
-import { spawn } from "child_process";
 
 class App extends Component {
   componentDidMount() {
@@ -35,12 +34,17 @@ class App extends Component {
           filter: true,
           width: 100,
           cellRenderer: params => {
-            let icon = document.createElement("img");
-            let name = document.createElement("span");
-            icon.src = params.data.logo;
-            name.innerHTML = params.data.name;
-            icon.appendChild(name);
-            return icon;
+              let div = document.createElement("div");
+              let icon = document.createElement("img");
+              icon.src = params.data.logo;
+              icon.classList = "crypto-icon";
+              div.appendChild(icon);
+              div.classList = "main-div-with-icon";
+              let name = document.createElement("span");
+              name.innerHTML = params.data.name;
+
+              icon.after(name);
+              return div;
           }
         },
         {
