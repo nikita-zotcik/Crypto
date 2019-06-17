@@ -192,12 +192,30 @@ class App extends Component {
             }
           }
         },
+        // {
+        //   headerName: "Date Added",
+        //   field: "date_added",
+        //   sortable: true,
+        //   filter: true
+        // },
         {
-          headerName: "Date Added",
-          field: "date_added",
+          headerName: "Circulating supply",
+          field: "circulating_supply",
           sortable: true,
           filter: true
-        }
+        },
+        {
+          headerName: "Total supply",
+          field: "total_supply",
+          sortable: true,
+          filter: true
+        },
+        {
+          headerName: "Max supply",
+          field: "max_supply",
+          sortable: true,
+          filter: true
+        },
       ],
       rowData: []
     };
