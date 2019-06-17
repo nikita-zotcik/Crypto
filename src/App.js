@@ -8,7 +8,7 @@ import { spawn } from "child_process";
 
 class App extends Component {
   componentDidMount() {
-    axios("http://localhost:5000/api/getCoinsFromDb")
+    axios("https://crypto-project-backend.herokuapp.com/api/getCoinsFromDb")
       .then(result => {
         return result.data.coins;
       })
