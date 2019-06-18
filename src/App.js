@@ -1,14 +1,19 @@
 import React, { Component } from "react";
+import Modal from 'react-modal';
 import "./App.css";
 import axios from "axios";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import "ag-grid-community/dist/styles/ag-grid.css";
+import ModalWindowLink from './ModalWindowLink';
 
 class App extends Component {
+  componentWillMount() {
+    Modal.setAppElement('body');
+  }
   componentDidMount() {
-    axios("https://crypto-project-backend.herokuapp.com/api/getCoinsFromDb")
-    // axios("http://localhost:5000/api/getCoinsFromDb")
+    // axios("https://crypto-project-backend.herokuapp.com/api/getCoinsFromDb")
+    axios("http://localhost:5000/api/getCoinsFromDb")
       .then(result => {
         return result.data.coins;
       })
@@ -91,12 +96,19 @@ class App extends Component {
           filter: true,
           cellRenderer: params => {
             if (params.data.twitter) {
-              let link = document.createElement("a");
-              link.href = params.data.twitter;
-              link.innerText = params.data.twitter;
-              link.target = "_blank";
+              let div = document.createElement('div');
+              let p = document.createElement('p');
+              p.className = 'twitter-text';
+              p.innerHTML = params.data.twitter;
+              div.appendChild(p);
+              div.addEventListener('click', this.openModal, false);
 
-              return link;
+              // let link = document.createElement("a");
+              // link.href = params.data.twitter;
+              // link.innerText = params.data.twitter;
+              // link.target = "_blank";
+
+              return div;
             }
           }
         },
@@ -217,8 +229,25 @@ class App extends Component {
           filter: true
         },
       ],
-      rowData: []
+      rowData: [],
+      modalIsOpen: false,
+      currentCoin: ''
     };
+
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+  }
+
+  openModal(e) {
+    const currentCoin = e.target.innerText.replace('https://twitter.com/', '');
+    this.setState({
+      modalIsOpen: true,
+      currentCoin
+    });
+  }
+
+  closeModal() {
+    this.setState({modalIsOpen: false});
   }
 
   render() {
@@ -234,6 +263,16 @@ class App extends Component {
           columnDefs={this.state.columnDefs}
           rowData={this.state.rowData}
         />
+        <Modal
+          className="twitter-modal"
+          isOpen={this.state.modalIsOpen}
+          onRequestClose={this.closeModal}
+          contentLabel="Example Modal"
+        >
+            <ModalWindowLink
+              currentCoin={this.state.currentCoin}
+            />
+        </Modal>
       </div>
     );
   }
