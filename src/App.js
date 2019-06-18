@@ -12,8 +12,8 @@ class App extends Component {
     Modal.setAppElement('body');
   }
   componentDidMount() {
-    // axios("https://crypto-project-backend.herokuapp.com/api/getCoinsFromDb")
-    axios("http://localhost:5000/api/getCoinsFromDb")
+    axios("https://crypto-project-backend.herokuapp.com/api/getCoinsFromDb")
+    // axios("http://localhost:5000/api/getCoinsFromDb")
       .then(result => {
         return result.data.coins;
       })
