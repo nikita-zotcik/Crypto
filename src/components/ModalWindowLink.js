@@ -11,8 +11,8 @@ class ModalWindowLink extends Component {
           sourceType={currentCoin}
           screenName={currentCoin}
           options={{
-            height: 600,
-            width: 300
+            height: 800,
+            width: 600
           }}
         />
       </div>

@@ -1,0 +1,33 @@
+.ag-theme-balham {
+  height: 900px;
+  width: 100%;
+}
+
+.crypto-icon {
+  width: 20px;
+  height: 20px;
+  margin: 0 3px 0 0;
+}
+
+.main-div-with-icon {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.text-link-with-modal {
+  padding: 0;
+  margin: 0;
+}
+
+.modal-window {
+  position: absolute;
+  transform: translate(-50%,-50%);
+  top: 50%;
+  left: 50%;
+}
+
+.iframe-container {
+  width: 600px;
+  height: 800px;
+}
