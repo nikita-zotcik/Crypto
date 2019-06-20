@@ -97,7 +97,7 @@ class Exchanges extends Component {
           sortable: true,
           filter: true,
           cellRenderer: params => {
-            if (params.data.percent_change_volume_24h > 0) {
+            if (params.data.percent_change_volume_24h !== 0) {
               let span = document.createElement("span");
               span.innerText = `${params.data.percent_change_volume_24h.toFixed(2)}%`;
 
