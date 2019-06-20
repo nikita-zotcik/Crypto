@@ -66,24 +66,84 @@ class Exchanges extends Component {
           field: "volume_24h_adjusted",
           sortable: true,
           filter: true,
+          cellRenderer: params => {
+            let value = params.data.volume_24h_adjusted;
+            if (value) {
+              let span = document.createElement("span");
+              if(value / 100000 < 1) {
+                span.innerText = Math.ceil(value).toString();
+              } else {
+                value = (value / 1000000000);
+                span.innerText = value < 1 ? (value * 100).toFixed(2) + 'm' : Math.ceil(value) + 'b';
+              }
+
+              return span;
+            }
+            return 0;
+          }
         },
         {
           headerName: "Volume(24h)",
           field: "volume_24h",
           sortable: true,
           filter: true,
+          cellRenderer: params => {
+            let value = params.data.volume_24h;
+            if (value) {
+              let span = document.createElement("span");
+              if(value / 100000 < 1) {
+                span.innerText = Math.ceil(value).toString();
+              } else {
+                value = (value / 1000000000);
+                span.innerText = value < 1 ? (value * 100).toFixed(2) + 'm' : Math.ceil(value) + 'b';
+              }
+
+              return span;
+            }
+            return 0;
+          }
         },
         {
           headerName: "Volume(7d)",
           field: "volume_7d",
           sortable: true,
           filter: true,
+          cellRenderer: params => {
+            let value = params.data.volume_7d;
+            if (value) {
+              let span = document.createElement("span");
+              if(value / 100000 < 1) {
+                span.innerText = Math.ceil(value).toString();
+              } else {
+                value = (value / 1000000000);
+                span.innerText = value < 1 ? (value * 100).toFixed(2) + 'm' : Math.ceil(value) + 'b';
+              }
+
+              return span;
+            }
+            return 0;
+          }
         },
         {
           headerName: "Volume(30d)",
           field: "volume_30d",
           sortable: true,
           filter: true,
+          cellRenderer: params => {
+            let value = params.data.volume_30d;
+            if (value) {
+              let span = document.createElement("span");
+              if(value / 100000 < 1) {
+                span.innerText = Math.ceil(value).toString();
+              } else {
+                value = (value / 1000000000);
+                span.innerText = value < 1 ? (value * 100).toFixed(2) + 'm' : Math.ceil(value) + 'b';
+              }
+
+              return span;
+            }
+            return 0;
+          }
         },
         {
           headerName: "No. Markets",

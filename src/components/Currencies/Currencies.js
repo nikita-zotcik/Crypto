@@ -220,19 +220,75 @@ class Currencies extends Component {
           headerName: "Circulating supply",
           field: "circulating_supply",
           sortable: true,
-          filter: true
+          filter: true,
+          cellRenderer: params => {
+            let circulating = params.data.circulating_supply;
+            if (circulating) {
+              circulating = (circulating / 1000000000);
+              let span = document.createElement("span");
+              span.innerText = circulating < 1 ? (circulating * 100).toFixed(2) + 'm' : Math.ceil(circulating) + 'b';
+
+              return span;
+            }
+            return 0;
+          }
         },
         {
           headerName: "Total supply",
           field: "total_supply",
           sortable: true,
-          filter: true
+          filter: true,
+          cellRenderer: params => {
+            let total = params.data.total_supply;
+            if (total) {
+              total = (total / 1000000000);
+              let span = document.createElement("span");
+              span.innerText = total < 1 ? (total * 100).toFixed(2) + 'm' : Math.ceil(total) + 'b';
+
+              return span;
+            }
+            return 0;
+          }
         },
         {
           headerName: "Max supply",
           field: "max_supply",
           sortable: true,
-          filter: true
+          filter: true,
+          cellRenderer: params => {
+            let max = params.data.max_supply;
+            if (max) {
+              max = (max / 1000000000);
+              let span = document.createElement("span");
+              span.innerText = max < 1 ? (max * 100).toFixed(2) + 'm' : Math.ceil(max) + 'b';
+
+              return span;
+            }
+            return 0;
+          }
+        },
+        {
+          headerName: "Exchanges",
+          field: "exchanges",
+          sortable: true,
+          filter: true,
+          height: 40,
+          cellRenderer: params => {
+            let div = document.createElement("div");
+            params.data.exchangesTop.forEach(exchange => {
+              let icon = document.createElement("img");
+              icon.src = exchange.logo;
+              icon.classList = "exchange-icon";
+              let link = document.createElement('a');
+              link.href = exchange.website;
+              link.target = '_blank';
+              link.className = 'exchanges-link';
+              link.appendChild(icon);
+              div.appendChild(link);
+            });
+            div.classList = "main-div-with-icon";
+            return div;
+          }
         },
       ],
       rowData: [],
