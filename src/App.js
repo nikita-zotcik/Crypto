@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import Currencies from './components/Currencies/Currensies';
+import Currencies from './components/Currencies/Currencies';
+import Exchanges from './components/Exchanges/Exchanges'
 import "react-tabs/style/react-tabs.css";
 import "./App.css";
 
@@ -21,7 +22,7 @@ class App extends Component {
             <Currencies />
           </TabPanel>
           <TabPanel>
-            <h2>Exchanges Table</h2>
+            <Exchanges />
           </TabPanel>
           <TabPanel>
             <h2>ICOs component</h2>
