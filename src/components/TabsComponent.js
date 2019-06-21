@@ -14,6 +14,7 @@ class TabsComponent extends Component {
           <Tab>ICOs</Tab>
           <Tab>Teams</Tab>
           <Tab>News</Tab>
+          <Tab>Transactions</Tab>
         </TabList>
 
         <TabPanel>
@@ -30,6 +31,9 @@ class TabsComponent extends Component {
         </TabPanel>
         <TabPanel>
           <h2>News component</h2>
+        </TabPanel>
+        <TabPanel>
+          <h2>Transactions component</h2>
         </TabPanel>
       </Tabs>
     );

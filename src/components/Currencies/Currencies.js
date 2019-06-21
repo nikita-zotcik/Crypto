@@ -29,13 +29,6 @@ class Currencies extends Component {
     super(props);
     this.state = {
       columnDefs: [
-        // {
-        //   headerName: "Id",
-        //   field: "id",
-        //   sortable: true,
-        //   filter: true,
-        //   width: 100
-        // },
         {
           headerName: "Name",
           field: "name",
@@ -80,7 +73,8 @@ class Currencies extends Component {
           headerName: "Exchanges number",
           field: "num_market_pairs",
           sortable: true,
-          filter: true
+          filter: true,
+          width: 150
         },
         {
           headerName: "Website",
@@ -192,7 +186,8 @@ class Currencies extends Component {
           headerName: "Tags",
           field: "tags",
           sortable: true,
-          filter: true
+          filter: true,
+          width: 100
         },
         {
           headerName: "Source Code",
@@ -210,17 +205,12 @@ class Currencies extends Component {
             }
           }
         },
-        // {
-        //   headerName: "Date Added",
-        //   field: "date_added",
-        //   sortable: true,
-        //   filter: true
-        // },
         {
           headerName: "Circulating supply",
           field: "circulating_supply",
           sortable: true,
           filter: true,
+          width: 150,
           cellRenderer: params => {
             let circulating = params.data.circulating_supply;
             if (circulating) {
@@ -238,6 +228,7 @@ class Currencies extends Component {
           field: "total_supply",
           sortable: true,
           filter: true,
+          width: 150,
           cellRenderer: params => {
             let total = params.data.total_supply;
             if (total) {
@@ -255,6 +246,7 @@ class Currencies extends Component {
           field: "max_supply",
           sortable: true,
           filter: true,
+          width: 150,
           cellRenderer: params => {
             let max = params.data.max_supply;
             if (max) {
@@ -269,25 +261,27 @@ class Currencies extends Component {
         },
         {
           headerName: "Exchanges",
-          field: "exchanges",
+          field: "exchanges_top",
           sortable: true,
           filter: true,
           height: 40,
           cellRenderer: params => {
-            let div = document.createElement("div");
-            params.data.exchangesTop.forEach(exchange => {
-              let icon = document.createElement("img");
-              icon.src = exchange.logo;
-              icon.classList = "exchange-icon";
-              let link = document.createElement('a');
-              link.href = exchange.website;
-              link.target = '_blank';
-              link.className = 'exchanges-link';
-              link.appendChild(icon);
-              div.appendChild(link);
-            });
-            div.classList = "main-div-with-icon";
-            return div;
+            if(params.data.exchanges_top) {
+              let div = document.createElement("div");
+              params.data.exchanges_top.forEach(exchange => {
+                let icon = document.createElement("img");
+                icon.src = exchange.logo;
+                icon.classList = "exchange-icon";
+                let link = document.createElement('a');
+                link.href = exchange.website;
+                link.target = '_blank';
+                link.className = 'exchanges-link';
+                link.appendChild(icon);
+                div.appendChild(link);
+              });
+              div.classList = "main-div-with-icon";
+              return div;
+            }
           }
         },
       ],

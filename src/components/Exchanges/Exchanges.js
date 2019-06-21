@@ -66,6 +66,7 @@ class Exchanges extends Component {
           field: "volume_24h_adjusted",
           sortable: true,
           filter: true,
+          width: 150,
           cellRenderer: params => {
             let value = params.data.volume_24h_adjusted;
             if (value) {
@@ -87,6 +88,7 @@ class Exchanges extends Component {
           field: "volume_24h",
           sortable: true,
           filter: true,
+          width: 150,
           cellRenderer: params => {
             let value = params.data.volume_24h;
             if (value) {
@@ -108,6 +110,7 @@ class Exchanges extends Component {
           field: "volume_7d",
           sortable: true,
           filter: true,
+          width: 150,
           cellRenderer: params => {
             let value = params.data.volume_7d;
             if (value) {
@@ -129,6 +132,7 @@ class Exchanges extends Component {
           field: "volume_30d",
           sortable: true,
           filter: true,
+          width: 150,
           cellRenderer: params => {
             let value = params.data.volume_30d;
             if (value) {
@@ -149,13 +153,15 @@ class Exchanges extends Component {
           headerName: "No. Markets",
           field: "num_market_pairs",
           sortable: true,
-          filter: true
+          filter: true,
+          width: 150,
         },
         {
           headerName: "Change(24h)",
           field: "percent_change_volume_24h",
           sortable: true,
           filter: true,
+          width: 150,
           cellRenderer: params => {
             if (params.data.percent_change_volume_24h !== 0 && params.data.percent_change_volume_24h) {
               let span = document.createElement("span");
