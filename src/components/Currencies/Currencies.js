@@ -25,6 +25,29 @@ class Currencies extends Component {
       .catch(err => err);
   }
 
+  convertSupply = (supply) => {
+    if (supply) {
+      let span = document.createElement("span");
+      let lengthSupply = Math.ceil(supply).toString().length;
+      switch (true) {
+        case (lengthSupply < 4):
+          span.innerText = Math.ceil(supply).toString();
+          break;
+        case (lengthSupply < 7):
+          span.innerText = (supply / 1000).toFixed(2) + 'h';
+          break;
+        case (lengthSupply < 10):
+          span.innerText = (supply / 1000000).toFixed(2) + 'm';
+          break;
+        default:
+          span.innerText = Math.ceil(supply / 1000000000) + 'b';
+          break;
+      }
+      return span;
+    }
+    return 0;
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -212,15 +235,7 @@ class Currencies extends Component {
           filter: true,
           width: 150,
           cellRenderer: params => {
-            let circulating = params.data.circulating_supply;
-            if (circulating) {
-              circulating = (circulating / 1000000000);
-              let span = document.createElement("span");
-              span.innerText = circulating < 1 ? (circulating * 100).toFixed(2) + 'm' : Math.ceil(circulating) + 'b';
-
-              return span;
-            }
-            return 0;
+            return this.convertSupply(params.data.circulating_supply);
           }
         },
         {
@@ -230,15 +245,7 @@ class Currencies extends Component {
           filter: true,
           width: 150,
           cellRenderer: params => {
-            let total = params.data.total_supply;
-            if (total) {
-              total = (total / 1000000000);
-              let span = document.createElement("span");
-              span.innerText = total < 1 ? (total * 100).toFixed(2) + 'm' : Math.ceil(total) + 'b';
-
-              return span;
-            }
-            return 0;
+            return this.convertSupply(params.data.total_supply)
           }
         },
         {
@@ -248,15 +255,7 @@ class Currencies extends Component {
           filter: true,
           width: 150,
           cellRenderer: params => {
-            let max = params.data.max_supply;
-            if (max) {
-              max = (max / 1000000000);
-              let span = document.createElement("span");
-              span.innerText = max < 1 ? (max * 100).toFixed(2) + 'm' : Math.ceil(max) + 'b';
-
-              return span;
-            }
-            return 0;
+            return this.convertSupply(params.data.max_supply);
           }
         },
         {
@@ -269,15 +268,17 @@ class Currencies extends Component {
             if(params.data.exchanges_top) {
               let div = document.createElement("div");
               params.data.exchanges_top.forEach(exchange => {
-                let icon = document.createElement("img");
-                icon.src = exchange.logo;
-                icon.classList = "exchange-icon";
-                let link = document.createElement('a');
-                link.href = exchange.website;
-                link.target = '_blank';
-                link.className = 'exchanges-link';
-                link.appendChild(icon);
-                div.appendChild(link);
+                if(exchange) {
+                  let icon = document.createElement("img");
+                  icon.src = exchange.logo;
+                  icon.classList = "exchange-icon";
+                  let link = document.createElement('a');
+                  link.href = exchange.website;
+                  link.target = '_blank';
+                  link.className = 'exchanges-link';
+                  link.appendChild(icon);
+                  div.appendChild(link);
+                }
               });
               div.classList = "main-div-with-icon";
               return div;
