@@ -1,8 +1,9 @@
-import React, {Component} from "react";
+import React, {Component} from 'react';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import Currencies from './Currencies/Currencies';
-import Exchanges from './Exchanges/Exchanges'
-import "react-tabs/style/react-tabs.css";
+import Exchanges from './Exchanges/Exchanges';
+import Transactions from './Transactions/Transactions';
+import 'react-tabs/style/react-tabs.css';
 
 class TabsComponent extends Component {
   render() {
@@ -33,7 +34,7 @@ class TabsComponent extends Component {
           <h2>News component</h2>
         </TabPanel>
         <TabPanel>
-          <h2>Transactions component</h2>
+          <Transactions />
         </TabPanel>
       </Tabs>
     );
