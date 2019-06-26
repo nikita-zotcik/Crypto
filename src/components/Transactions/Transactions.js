@@ -65,30 +65,30 @@ class Transactions extends Component {
           filter: true,
           cellRenderer: params => shortValue(params.data.amount_usd)
         },
-        {
-          headerName: "Sender",
-          field: "sender",
-          sortable: true,
-          filter: true,
-        },
-        {
-          headerName: "Receiver",
-          field: "receiver",
-          sortable: true,
-          filter: true,
-        },
         // {
         //   headerName: "Sender",
-        //   field: "from.owner_type",
+        //   field: "sender",
         //   sortable: true,
         //   filter: true,
         // },
         // {
         //   headerName: "Receiver",
-        //   field: "to.owner_type",
+        //   field: "receiver",
         //   sortable: true,
         //   filter: true,
         // },
+        {
+          headerName: "Sender",
+          field: "from.owner_type",
+          sortable: true,
+          filter: true,
+        },
+        {
+          headerName: "Receiver",
+          field: "to.owner_type",
+          sortable: true,
+          filter: true,
+        },
       ],
       rowData: [],
     };
