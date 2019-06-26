@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import { AgGridReact } from "ag-grid-react";
 import axios from "axios";
 import ModalWindowLink from '../ModalWindowLink';
+import { shortValue } from '../ShortValue';
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "./Exchanges.css";
@@ -23,29 +24,6 @@ class Exchanges extends Component {
       })
       .catch(err => err);
   }
-
-  convertVolume = (value) => {
-    if (value) {
-      let span = document.createElement("span");
-      let lengthSupply = Math.ceil(value).toString().length;
-      switch (true) {
-        case (lengthSupply < 4):
-          span.innerText = Math.ceil(value).toString();
-          break;
-        case (lengthSupply < 7):
-          span.innerText = (value / 1000).toFixed(2) + 'h';
-          break;
-        case (lengthSupply < 10):
-          span.innerText = (value / 1000000).toFixed(2) + 'm';
-          break;
-        default:
-          span.innerText = Math.ceil(value / 1000000000) + 'b';
-          break;
-      }
-      return span;
-    }
-    return 0;
-  };
 
   constructor(props) {
     super(props);
@@ -90,7 +68,7 @@ class Exchanges extends Component {
           sortable: true,
           filter: true,
           width: 150,
-          cellRenderer: params => this.convertVolume(params.data.volume_24h_adjusted)
+          cellRenderer: params => shortValue(params.data.volume_24h_adjusted)
         },
         {
           headerName: "Volume(24h)",
@@ -98,7 +76,7 @@ class Exchanges extends Component {
           sortable: true,
           filter: true,
           width: 150,
-          cellRenderer: params => this.convertVolume(params.data.volume_24h)
+          cellRenderer: params => shortValue(params.data.volume_24h)
         },
         {
           headerName: "Volume(7d)",
@@ -106,7 +84,7 @@ class Exchanges extends Component {
           sortable: true,
           filter: true,
           width: 150,
-          cellRenderer: params => this.convertVolume(params.data.volume_7d)
+          cellRenderer: params => shortValue(params.data.volume_7d)
         },
         {
           headerName: "Volume(30d)",
@@ -114,7 +92,7 @@ class Exchanges extends Component {
           sortable: true,
           filter: true,
           width: 150,
-          cellRenderer: params => this.convertVolume(params.data.volume_30d)
+          cellRenderer: params => shortValue(params.data.volume_30d)
         },
         {
           headerName: "No. Markets",

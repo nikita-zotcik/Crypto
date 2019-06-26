@@ -7,6 +7,7 @@ import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import ModalWindowLink from '../ModalWindowLink';
 import ModalReddit from '../ModalReddit';
+import { shortValue } from '../ShortValue';
 
 class Currencies extends Component {
   componentWillMount() {
@@ -24,29 +25,6 @@ class Currencies extends Component {
       })
       .catch(err => err);
   }
-
-  convertSupply = (supply) => {
-    if (supply) {
-      let span = document.createElement("span");
-      let lengthSupply = Math.ceil(supply).toString().length;
-      switch (true) {
-        case (lengthSupply < 4):
-          span.innerText = Math.ceil(supply).toString();
-          break;
-        case (lengthSupply < 7):
-          span.innerText = (supply / 1000).toFixed(2) + 'h';
-          break;
-        case (lengthSupply < 10):
-          span.innerText = (supply / 1000000).toFixed(2) + 'm';
-          break;
-        default:
-          span.innerText = Math.ceil(supply / 1000000000) + 'b';
-          break;
-      }
-      return span;
-    }
-    return 0;
-  };
 
   constructor(props) {
     super(props);
@@ -234,9 +212,7 @@ class Currencies extends Component {
           sortable: true,
           filter: true,
           width: 150,
-          cellRenderer: params => {
-            return this.convertSupply(params.data.circulating_supply);
-          }
+          cellRenderer: params => shortValue(params.data.circulating_supply)
         },
         {
           headerName: "Total supply",
@@ -244,9 +220,7 @@ class Currencies extends Component {
           sortable: true,
           filter: true,
           width: 150,
-          cellRenderer: params => {
-            return this.convertSupply(params.data.total_supply)
-          }
+          cellRenderer: params => shortValue(params.data.total_supply)
         },
         {
           headerName: "Max supply",
@@ -254,9 +228,7 @@ class Currencies extends Component {
           sortable: true,
           filter: true,
           width: 150,
-          cellRenderer: params => {
-            return this.convertSupply(params.data.max_supply);
-          }
+          cellRenderer: params => shortValue(params.data.max_supply)
         },
         {
           headerName: "Exchanges",

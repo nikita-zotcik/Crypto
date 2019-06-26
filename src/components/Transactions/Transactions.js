@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { AgGridReact } from "ag-grid-react";
 import axios from "axios";
 import moment from 'moment';
+import { shortValue } from '../ShortValue';
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import "ag-grid-community/dist/styles/ag-grid.css";
 
@@ -33,6 +34,17 @@ class Transactions extends Component {
             return span;
           }
         },
+        // {
+        //   headerName: "Date",
+        //   field: "timestamp",
+        //   sortable: true,
+        //   filter: true,
+        //   cellRenderer: params => {
+        //     let span = document.createElement("span");
+        //     span.innerText = moment(params.data.timestamp * 1000).format('MMMM Do YYYY, h:mm:ss a');
+        //     return span;
+        //   }
+        // },
         {
           headerName: "Coin",
           field: "coin",
@@ -44,22 +56,36 @@ class Transactions extends Component {
           field: "amount",
           sortable: true,
           filter: true,
+          cellRenderer: params => shortValue(params.data.amount)
         },
         {
           headerName: "Amount USD",
           field: "amount_usd",
           sortable: true,
           filter: true,
+          cellRenderer: params => shortValue(params.data.amount_usd)
         },
+        // {
+        //   headerName: "Sender",
+        //   field: "sender",
+        //   sortable: true,
+        //   filter: true,
+        // },
+        // {
+        //   headerName: "Receiver",
+        //   field: "receiver",
+        //   sortable: true,
+        //   filter: true,
+        // },
         {
           headerName: "Sender",
-          field: "sender",
+          field: "from.owner",
           sortable: true,
           filter: true,
         },
         {
           headerName: "Receiver",
-          field: "receiver",
+          field: "to.owner",
           sortable: true,
           filter: true,
         },
@@ -74,6 +100,7 @@ class Transactions extends Component {
         <AgGridReact
           columnDefs={this.state.columnDefs}
           rowData={this.state.rowData}
+          pagination={true}
         />
       </div>
     );
