@@ -20,7 +20,7 @@ class ModalTelegram extends Component {
     axiosRequest = (link) => {
         console.debug(link);
 
-        axios(`https://crypto-project-frontend.herokuapp.com/api/getTelegram?link=${link}`)
+        axios(`https://crypto-project-backend.herokuapp.com/api/getTelegram?link=${link}`)
             .then(result => {
                 if (result.data === "CODE#400 CHANNEL_INVALID") {
                     this.setState({
