@@ -8,11 +8,18 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import ModalWindowLink from '../ModalWindowLink';
 import ModalReddit from '../ModalReddit';
 import { shortValue } from '../ShortValue';
+import ModalTelegram from '../ModalTelegram';
 
 class Currencies extends Component {
   componentWillMount() {
     Modal.setAppElement('body');
   }
+
+  // modalTelegram=()=> {
+  //   let div = document.createElement('div');
+  //
+  //   return (<div className='modal-window-tg'>fff</div>)
+  // };
 
   componentDidMount() {
     axios("https://crypto-project-backend.herokuapp.com/api/getCoinsFromDb")
@@ -118,12 +125,19 @@ class Currencies extends Component {
           filter: true,
           cellRenderer: params => {
             if (params.data.chat) {
-              let link = document.createElement("a");
-              link.href = params.data.chat;
-              link.innerText = params.data.chat;
-              link.target = "_blank";
 
-              return link;
+              let div = document.createElement('div');
+
+              let p = document.createElement('p');
+              // link.href = params.data.chat;
+              // link.innerText = params.data.chat;
+              // link.target = "_blank";
+              p.className = 'text-link-with-modal';
+              p.innerHTML = params.data.chat;
+
+              div.appendChild(p);
+              div.addEventListener('click', this.openModalTelegram, false);
+              return div;
             }
           }
         },
@@ -260,12 +274,15 @@ class Currencies extends Component {
       ],
       rowData: [],
       modalIsOpenTwitter: false,
+      modalIsOpenTelegram: false,
       modalIsOpenReddit: false,
       currentCoinTwitter: '',
-      currentCoinReddit: ''
+      currentCoinReddit: '',
+      currentCoinTelegram: ''
     };
 
     this.openModalTwitter = this.openModalTwitter.bind(this);
+    this.openModalTelegram = this.openModalTelegram.bind(this);
     this.openModalReddit = this.openModalReddit.bind(this);
     this.closeModalTwitter = this.closeModalTwitter.bind(this);
     this.closeModalReddit = this.closeModalReddit.bind(this);
@@ -279,9 +296,21 @@ class Currencies extends Component {
     });
   }
 
+  openModalTelegram(e) {
+    const currentCoinTelegram = e.target;
+    this.setState({
+      modalIsOpenTelegram: true,
+      currentCoinTelegram
+    });
+  }
+
   closeModalTwitter() {
     this.setState({modalIsOpenTwitter: false});
   }
+
+  closeModalTelegram = ()=> {
+    this.setState({modalIsOpenTelegram: false});
+  };
 
   openModalReddit(e) {
     const currentCoinReddit = e.target.innerText.replace('https://reddit.com/r/', '');
@@ -310,6 +339,16 @@ class Currencies extends Component {
         >
           <ModalWindowLink
             currentCoin={this.state.currentCoinTwitter}
+          />
+        </Modal>
+        <Modal
+          className="modal-window"
+          isOpen={this.state.modalIsOpenTelegram}
+          onRequestClose={this.closeModalTelegram}
+          contentLabel="Telegram Modal"
+        >
+          <ModalTelegram
+            currentCoin={this.state.currentCoinTelegram}
           />
         </Modal>
         <Modal
