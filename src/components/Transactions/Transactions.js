@@ -5,16 +5,23 @@ import moment from 'moment';
 import { shortValue } from '../ShortValue';
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import "ag-grid-community/dist/styles/ag-grid.css";
+import './Transactions.css';
 
 class Transactions extends Component {
   componentDidMount() {
     axios("https://crypto-project-backend.herokuapp.com/api/getTransactionsFromDb")
     // axios("http://localhost:5000/api/getTransactionsFromDb")
       .then(result => {
-        return result.data.transactions;
+        return result.data;
       })
-      .then(rowData => {
-        this.setState({ rowData });
+      .then( data => {
+        const { transactions, countRecords } = data;
+        this.setState({
+          rowData: transactions,
+          countRecords: countRecords,
+          lastIdTransaction: transactions[transactions.length - 1]._id,
+          previousIdTransaction: [transactions[0]._id],
+        });
       })
       .catch(err => err);
   }
@@ -30,24 +37,13 @@ class Transactions extends Component {
           filter: true,
           cellRenderer: params => {
             let span = document.createElement("span");
-            span.innerText = moment(params.data.timestamp).format('MMMM Do YYYY, h:mm:ss a');
+            span.innerText = moment(params.data.timestamp * 1000).format('MMMM Do YYYY, h:mm:ss a');
             return span;
           }
         },
-        // {
-        //   headerName: "Date",
-        //   field: "timestamp",
-        //   sortable: true,
-        //   filter: true,
-        //   cellRenderer: params => {
-        //     let span = document.createElement("span");
-        //     span.innerText = moment(params.data.timestamp * 1000).format('MMMM Do YYYY, h:mm:ss a');
-        //     return span;
-        //   }
-        // },
         {
           headerName: "Coin",
-          field: "coin",
+          field: "blockchain",
           sortable: true,
           filter: true,
         },
@@ -65,43 +61,90 @@ class Transactions extends Component {
           filter: true,
           cellRenderer: params => shortValue(params.data.amount_usd)
         },
-        // {
-        //   headerName: "Sender",
-        //   field: "sender",
-        //   sortable: true,
-        //   filter: true,
-        // },
-        // {
-        //   headerName: "Receiver",
-        //   field: "receiver",
-        //   sortable: true,
-        //   filter: true,
-        // },
         {
           headerName: "Sender",
-          field: "from.owner_type",
+          field: "from.owner",
           sortable: true,
           filter: true,
+          cellRenderer: params => {
+            let span = document.createElement("span");
+            span.innerHTML = 'owner' in params.data.from ? params.data.from.owner : 'unknown';
+            return span;
+          }
         },
         {
           headerName: "Receiver",
-          field: "to.owner_type",
+          field: "to.owner",
           sortable: true,
           filter: true,
+          cellRenderer: params => {
+            let span = document.createElement("span");
+            span.innerHTML = 'owner' in params.data.to ? params.data.to.owner : 'unknown';
+            return span;
+          }
         },
       ],
       rowData: [],
+      countRecords: 0,
+      lastIdTransaction: '',
+      previousIdTransaction: [],
+      pageNumber: 1,
     };
   }
 
+  nextPage = () => {
+    const { lastIdTransaction, pageNumber, previousIdTransaction } = this.state;
+    axios(`https://crypto-project-backend.herokuapp.com/api/getTransactionsFromDb?id=${lastIdTransaction}`)
+    // axios(`http://localhost:5000/api/getTransactionsFromDb?id=${lastIdTransaction}`)
+      .then(result => {
+        return result.data.transactions;
+      })
+      .then( data => {
+        if(previousIdTransaction.indexOf(data[0]._id) < 0) previousIdTransaction.push(data[0]._id);
+        this.setState({
+          rowData: data,
+          lastIdTransaction: data[data.length - 1]._id,
+          previousIdTransaction: previousIdTransaction,
+          pageNumber: pageNumber + 1
+        });
+      })
+      .catch(err => err);
+  };
+
+  prevPage = () => {
+    const { previousIdTransaction, pageNumber } = this.state;
+    axios(`https://crypto-project-backend.herokuapp.com/api/getTransactionsFromDb?id=${previousIdTransaction[pageNumber - 2]}`)
+    // axios(`http://localhost:5000/api/getTransactionsFromDb?id=${previousIdTransaction[pageNumber - 2]}`)
+      .then(result => {
+        return result.data.transactions;
+      })
+      .then( data => {
+        previousIdTransaction.pop();
+        this.setState({
+          rowData: data,
+          lastIdTransaction: data[data.length - 1]._id,
+          previousIdTransaction: previousIdTransaction,
+          pageNumber: pageNumber - 1,
+        });
+      })
+      .catch(err => err);
+  };
+
   render() {
+    const { pageNumber, countRecords } = this.state;
+
     return (
       <div className="ag-theme-balham">
-        <AgGridReact
-          columnDefs={this.state.columnDefs}
-          rowData={this.state.rowData}
-          pagination={true}
-        />
+        <div className="table-transactions">
+          <AgGridReact
+            columnDefs={this.state.columnDefs}
+            rowData={this.state.rowData}
+          />
+        </div>
+        <div className="pagination-button">
+          <button onClick={() => this.prevPage()} disabled={pageNumber === 1}>prev</button>
+          <button onClick={() => this.nextPage()} disabled={Math.ceil(countRecords/100) === pageNumber}>next</button>
+        </div>
       </div>
     );
   }
