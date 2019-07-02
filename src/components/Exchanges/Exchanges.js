@@ -7,6 +7,7 @@ import { shortValue } from '../ShortValue';
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "./Exchanges.css";
+import Loader from "../Loader/Loader";
 
 class Exchanges extends Component {
   componentWillMount() {
@@ -29,20 +30,6 @@ class Exchanges extends Component {
     super(props);
     this.state = {
       columnDefs: [
-        // {
-        //   headerName: "Id",
-        //   field: "id",
-        //   sortable: true,
-        //   filter: true,
-        //   width: 100
-        // },
-        // {
-        //   headerName: "Slug",
-        //   field: "slug",
-        //   sortable: true,
-        //   filter: true,
-        //   width: 100
-        // },
         {
           headerName: "Name",
           field: "name",
@@ -203,6 +190,10 @@ class Exchanges extends Component {
       rowData: [],
       modalIsOpenTwitter: false,
       currentExchangesTwitter: '',
+      frameworkComponents: {
+        customNoRowsOverlay: Loader
+      },
+      noRowsOverlayComponent: "customNoRowsOverlay",
     };
 
     this.openModalTwitter = this.openModalTwitter.bind(this);
@@ -222,20 +213,31 @@ class Exchanges extends Component {
   }
 
   render() {
+    const {
+      columnDefs,
+      rowData,
+      frameworkComponents,
+      noRowsOverlayComponent,
+      modalIsOpenTwitter,
+      currentExchangesTwitter
+    } = this.state;
+
     return (
       <div className="ag-theme-balham">
         <AgGridReact
-          columnDefs={this.state.columnDefs}
-          rowData={this.state.rowData}
+          columnDefs={columnDefs}
+          rowData={rowData}
+          frameworkComponents={frameworkComponents}
+          noRowsOverlayComponent={noRowsOverlayComponent}
         />
         <Modal
           className="modal-window"
-          isOpen={this.state.modalIsOpenTwitter}
+          isOpen={modalIsOpenTwitter}
           onRequestClose={this.closeModalTwitter}
           contentLabel="Example Modal"
         >
           <ModalWindowLink
-            currentCoin={this.state.currentExchangesTwitter}
+            currentCoin={currentExchangesTwitter}
           />
         </Modal>
       </div>

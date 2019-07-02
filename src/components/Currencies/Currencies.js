@@ -9,6 +9,7 @@ import ModalWindowLink from '../ModalWindowLink';
 import ModalReddit from '../ModalReddit';
 import { shortValue } from '../ShortValue';
 import ModalTelegram from '../ModalTelegram';
+import Loader from '../Loader/Loader';
 
 class Currencies extends Component {
   componentWillMount() {
@@ -62,6 +63,14 @@ class Currencies extends Component {
           field: "description",
           sortable: true,
           filter: true
+        },
+        {
+          headerName: "Market Cap",
+          field: "market_cap",
+          sortable: true,
+          filter: true,
+          width: 150,
+          cellRenderer: params => shortValue(params.data.market_cap)
         },
         {
           headerName: "Exchanges number",
@@ -264,7 +273,11 @@ class Currencies extends Component {
       modalIsOpenReddit: false,
       currentCoinTwitter: '',
       currentCoinReddit: '',
-      currentCoinTelegram: ''
+      currentCoinTelegram: '',
+      frameworkComponents: {
+        customNoRowsOverlay: Loader
+      },
+      noRowsOverlayComponent: "customNoRowsOverlay",
     };
 
     this.openModalTwitter = this.openModalTwitter.bind(this);
@@ -311,40 +324,56 @@ class Currencies extends Component {
   }
 
   render() {
+    const {
+      columnDefs,
+      rowData,
+      frameworkComponents,
+      noRowsOverlayComponent,
+      modalIsOpenTwitter,
+      currentCoinTwitter,
+      modalIsOpenTelegram,
+      currentCoinTelegram,
+      modalIsOpenReddit,
+      currentCoinReddit
+    } = this.state;
+
     return (
       <div className="ag-theme-balham">
         <AgGridReact
-          columnDefs={this.state.columnDefs}
-          rowData={this.state.rowData}
+          columnDefs={columnDefs}
+          rowData={rowData}
+          pagination={true}
+          frameworkComponents={frameworkComponents}
+          noRowsOverlayComponent={noRowsOverlayComponent}
         />
         <Modal
           className="modal-window"
-          isOpen={this.state.modalIsOpenTwitter}
+          isOpen={modalIsOpenTwitter}
           onRequestClose={this.closeModalTwitter}
           contentLabel="Example Modal"
         >
           <ModalWindowLink
-            currentCoin={this.state.currentCoinTwitter}
+            currentCoin={currentCoinTwitter}
           />
         </Modal>
         <Modal
           className="modal-window"
-          isOpen={this.state.modalIsOpenTelegram}
+          isOpen={modalIsOpenTelegram}
           onRequestClose={this.closeModalTelegram}
           contentLabel="Telegram Modal"
         >
           <ModalTelegram
-            currentCoin={this.state.currentCoinTelegram}
+            currentCoin={currentCoinTelegram}
           />
         </Modal>
         <Modal
           className="modal-window"
-          isOpen={this.state.modalIsOpenReddit}
+          isOpen={modalIsOpenReddit}
           onRequestClose={this.closeModalReddit}
           contentLabel="Example Modal"
         >
           <ModalReddit
-            currentCoin={this.state.currentCoinReddit}
+            currentCoin={currentCoinReddit}
           />
         </Modal>
       </div>

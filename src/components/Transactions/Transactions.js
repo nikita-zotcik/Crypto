@@ -6,6 +6,7 @@ import { shortValue } from '../ShortValue';
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import './Transactions.css';
+import Loader from "../Loader/Loader";
 
 class Transactions extends Component {
   componentDidMount() {
@@ -89,11 +90,17 @@ class Transactions extends Component {
       lastIdTransaction: '',
       previousIdTransaction: [],
       pageNumber: 1,
+      frameworkComponents: {
+        customNoRowsOverlay: Loader
+      },
+      noRowsOverlayComponent: "customNoRowsOverlay",
     };
   }
 
   nextPage = () => {
     const { lastIdTransaction, pageNumber, previousIdTransaction } = this.state;
+    this.setState({rowData: []});
+
     axios(`https://crypto-project-backend.herokuapp.com/api/getTransactionsFromDb?id=${lastIdTransaction}`)
     // axios(`http://localhost:5000/api/getTransactionsFromDb?id=${lastIdTransaction}`)
       .then(result => {
@@ -113,6 +120,8 @@ class Transactions extends Component {
 
   prevPage = () => {
     const { previousIdTransaction, pageNumber } = this.state;
+    this.setState({rowData: []});
+
     axios(`https://crypto-project-backend.herokuapp.com/api/getTransactionsFromDb?id=${previousIdTransaction[pageNumber - 2]}`)
     // axios(`http://localhost:5000/api/getTransactionsFromDb?id=${previousIdTransaction[pageNumber - 2]}`)
       .then(result => {
@@ -131,14 +140,23 @@ class Transactions extends Component {
   };
 
   render() {
-    const { pageNumber, countRecords } = this.state;
+    const {
+      pageNumber,
+      countRecords,
+      frameworkComponents,
+      rowData,
+      columnDefs,
+      noRowsOverlayComponent
+    } = this.state;
 
     return (
       <div className="ag-theme-balham">
         <div className="table-transactions">
           <AgGridReact
-            columnDefs={this.state.columnDefs}
-            rowData={this.state.rowData}
+            columnDefs={columnDefs}
+            rowData={rowData}
+            frameworkComponents={frameworkComponents}
+            noRowsOverlayComponent={noRowsOverlayComponent}
           />
         </div>
         <div className="pagination-button">
