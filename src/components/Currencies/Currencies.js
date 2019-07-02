@@ -58,20 +58,6 @@ class Currencies extends Component {
           }
         },
         {
-          headerName: "Symbol",
-          field: "symbol",
-          sortable: true,
-          filter: true,
-          width: 100
-        },
-        {
-          headerName: "Slug",
-          field: "slug",
-          sortable: true,
-          filter: true,
-          width: 100
-        },
-        {
           headerName: "Description",
           field: "description",
           sortable: true,
