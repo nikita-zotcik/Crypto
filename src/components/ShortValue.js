@@ -7,7 +7,7 @@ export const shortValue = (value) => {
         span.innerText = Math.ceil(value).toString();
         break;
       case (lengthSupply < 7):
-        span.innerText = (value / 1000).toFixed(2) + 'h';
+        span.innerText = (value / 1000).toFixed(2) + 'k';
         break;
       case (lengthSupply < 10):
         span.innerText = (value / 1000000).toFixed(2) + 'm';
