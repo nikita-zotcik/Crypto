@@ -8,7 +8,7 @@ import Loader from "../Loader/Loader";
 class ModalHolders extends Component {
 
   componentDidMount() {
-    axios(`http://api.ethplorer.io/getTopTokenHolders/${this.props.token}?apiKey=freekey&start=${this.state.start}&limit=100`)
+    axios(`https://api.ethplorer.io/getTopTokenHolders/${this.props.token}?apiKey=freekey&start=${this.state.start}&limit=100`)
       .then(result => {
         return result.data.holders;
       })
