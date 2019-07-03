@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Modal from 'react-modal';
 import { AgGridReact } from "ag-grid-react";
 import axios from "axios";
-import ModalWindowLink from '../ModalWindowLink';
+import ModalWindowLink from '../Modals/ModalWindowLink';
 import { shortValue } from '../ShortValue';
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import "ag-grid-community/dist/styles/ag-grid.css";

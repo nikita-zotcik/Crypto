@@ -5,8 +5,9 @@ import axios from "axios";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import "ag-grid-community/dist/styles/ag-grid.css";
-import ModalWindowLink from '../ModalWindowLink';
-import ModalReddit from '../ModalReddit';
+import ModalWindowLink from '../Modals/ModalWindowLink';
+import ModalReddit from '../Modals/ModalReddit';
+import ModalHolders from '../Modals/ModalHolders';
 import { shortValue } from '../ShortValue';
 import ModalTelegram from '../ModalTelegram';
 import Loader from '../Loader/Loader';
@@ -174,7 +175,46 @@ class Currencies extends Component {
           headerName: "Explorer",
           field: "explorer",
           sortable: true,
-          filter: true
+          filter: true,
+          cellRenderer: params => {
+            if (params.data.explorer) {
+              let div = document.createElement('div');
+              let p = document.createElement('p');
+              p.className = 'text-link-with-modal';
+              p.innerHTML = params.data.explorer;
+              div.appendChild(p);
+              let flag = false;
+              params.data.explorer.forEach(item => {
+                const temp = item.split('/');
+                if(temp[2] === 'etherscan.io') flag = true;
+              });
+              if(flag) div.addEventListener('click', this.openModalHolders, false);
+
+              return div;
+            }
+          }
+        },
+        {
+          headerName: "Holders",
+          field: "holdersCount",
+          sortable: true,
+          filter: true,
+          cellRenderer: params => {
+            let span = document.createElement("span");
+            span.innerText = 'holdersCount' in params.data ? params.data.holdersCount : '';
+            return span;
+          }
+        },
+        {
+          headerName: "Transfers",
+          field: "transfersCount",
+          sortable: true,
+          filter: true,
+          cellRenderer: params => {
+            let span = document.createElement("span");
+            span.innerText = 'transfersCount' in params.data ? params.data.holdersCount : '';
+            return span;
+          }
         },
         {
           headerName: "Technical Doc",
@@ -271,6 +311,8 @@ class Currencies extends Component {
       modalIsOpenTwitter: false,
       modalIsOpenTelegram: false,
       modalIsOpenReddit: false,
+      modalIsOpenHolders: false,
+      holdersToken: '',
       currentCoinTwitter: '',
       currentCoinReddit: '',
       currentCoinTelegram: '',
@@ -281,10 +323,12 @@ class Currencies extends Component {
     };
 
     this.openModalTwitter = this.openModalTwitter.bind(this);
+    this.openModalHolders = this.openModalHolders.bind(this);
     this.openModalTelegram = this.openModalTelegram.bind(this);
     this.openModalReddit = this.openModalReddit.bind(this);
     this.closeModalTwitter = this.closeModalTwitter.bind(this);
     this.closeModalReddit = this.closeModalReddit.bind(this);
+    this.closeModalHolders = this.closeModalHolders.bind(this);
   }
 
   openModalTwitter(e) {
@@ -323,6 +367,22 @@ class Currencies extends Component {
     this.setState({modalIsOpenReddit: false});
   }
 
+  openModalHolders(e) {
+    let holdersToken = '';
+    e.target.innerText.split(',').forEach(item => {
+      const temp = item.split('/');
+      if(temp[2] === 'etherscan.io') holdersToken = temp[4];
+    });
+    this.setState({
+      modalIsOpenHolders: true,
+      holdersToken
+    });
+  }
+
+  closeModalHolders() {
+    this.setState({modalIsOpenHolders: false});
+  }
+
   render() {
     const {
       columnDefs,
@@ -334,7 +394,9 @@ class Currencies extends Component {
       modalIsOpenTelegram,
       currentCoinTelegram,
       modalIsOpenReddit,
-      currentCoinReddit
+      currentCoinReddit,
+      modalIsOpenHolders,
+      holdersToken
     } = this.state;
 
     return (
@@ -374,6 +436,16 @@ class Currencies extends Component {
         >
           <ModalReddit
             currentCoin={currentCoinReddit}
+          />
+        </Modal>
+        <Modal
+          className="modal-window holders"
+          isOpen={modalIsOpenHolders}
+          onRequestClose={this.closeModalHolders}
+          contentLabel="Example Modal"
+        >
+          <ModalHolders
+            token={holdersToken}
           />
         </Modal>
       </div>
