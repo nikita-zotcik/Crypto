@@ -199,22 +199,16 @@ class Currencies extends Component {
           field: "holdersCount",
           sortable: true,
           filter: true,
-          cellRenderer: params => {
-            let span = document.createElement("span");
-            span.innerText = 'holdersCount' in params.data ? params.data.holdersCount : '';
-            return span;
-          }
+          width: 100,
+          cellRenderer: params => 'holdersCount' in params.data ? shortValue(params.data.holdersCount) : ''
         },
         {
           headerName: "Transfers",
           field: "transfersCount",
           sortable: true,
           filter: true,
-          cellRenderer: params => {
-            let span = document.createElement("span");
-            span.innerText = 'transfersCount' in params.data ? params.data.holdersCount : '';
-            return span;
-          }
+          width: 100,
+          cellRenderer: params => 'transfersCount' in params.data ? shortValue(params.data.transfersCount) : ''
         },
         {
           headerName: "Technical Doc",
@@ -254,6 +248,22 @@ class Currencies extends Component {
               return link;
             }
           }
+        },
+        {
+          headerName: 'High',
+          field: 'high',
+          sortable: true,
+          filter: true,
+          width: 100,
+          cellRenderer: params => params.data.high.toFixed(4)
+        },
+        {
+          headerName: 'Low',
+          field: 'low',
+          sortable: true,
+          filter: true,
+          width: 100,
+          cellRenderer: params => params.data.high.toFixed(4)
         },
         {
           headerName: "Circulating supply",
@@ -373,6 +383,12 @@ class Currencies extends Component {
       const temp = item.split('/');
       if(temp[2] === 'etherscan.io') holdersToken = temp[4];
     });
+    if(holdersToken.length < 20) {
+      e.target.innerText.split(',').forEach(temp => {
+        const str = temp.split('/');
+        if (str[2] === 'ethplorer.io') holdersToken = str[4];
+      });
+    }
     this.setState({
       modalIsOpenHolders: true,
       holdersToken

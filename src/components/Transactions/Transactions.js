@@ -44,7 +44,7 @@ class Transactions extends Component {
         },
         {
           headerName: "Coin",
-          field: "blockchain",
+          field: "symbol",
           sortable: true,
           filter: true,
         },

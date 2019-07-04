@@ -13,10 +13,15 @@ class ModalHolders extends Component {
         return result.data.holders;
       })
       .then(rowData => {
-        rowData.forEach((item, index) => {
-          item.number = index + 1;
-        });
-        this.setState({ rowData });
+        axios(`https://api.ethplorer.io/getAddressInfo/${this.props.token}?apiKey=freekey`)
+          .then(result => {
+            rowData.forEach((item, index) => {
+              item.number = index + 1;
+            });
+            const total = 'tokens' in result.data ? result.data.tokens[0].tokenInfo.totalSupply : result.data.tokenInfo.totalSupply;
+            this.setState({ rowData: rowData, totalSupply: total});
+          })
+          .catch(err => err)
       })
       .catch(err => err);
   }
@@ -38,11 +43,43 @@ class ModalHolders extends Component {
           filter: true,
           width: 450
         },
+        // {
+        //   headerName: "Balance",
+        //   field: "balance",
+        //   sortable: true,
+        //   filter: true
+        // },
         {
-          headerName: "Balance",
+          headerName: "Quantity",
           field: "balance",
           sortable: true,
-          filter: true
+          filter: true,
+          cellRenderer: params => {
+            if (params.data.balance) {
+              let balance = params.data.balance.toString().split('');
+              let value = '';
+              for(let i = 0; i < balance.indexOf('e'); i++) {
+                value += balance[i];
+              }
+              let span = document.createElement("span");
+              span.innerText = ((+value) * 1000000).toString();
+
+              return span;
+            }
+          }
+        },
+        {
+          headerName: "Percentage",
+          field: "balance",
+          sortable: true,
+          filter: true,
+          cellRenderer: params => {
+            if (params.data.balance) {
+              let span = document.createElement("span");
+              span.innerText = ((params.data.balance * 100) / this.state.totalSupply).toFixed(4) + '%';
+              return span;
+            }
+          }
         },
       ],
       rowData: [],
@@ -52,6 +89,7 @@ class ModalHolders extends Component {
       noRowsOverlayComponent: "customNoRowsOverlay",
       divStyle: { width: '100%', height:'100%', background: 'white', opacity: '1'},
       start: 1,
+      totalSupply: '',
     };
   }
 
