@@ -263,7 +263,7 @@ class Currencies extends Component {
           sortable: true,
           filter: true,
           width: 100,
-          cellRenderer: params => params.data.high.toFixed(4)
+          cellRenderer: params => params.data.low.toFixed(4)
         },
         {
           headerName: "Circulating supply",

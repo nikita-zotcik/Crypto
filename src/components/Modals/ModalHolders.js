@@ -13,13 +13,20 @@ class ModalHolders extends Component {
         return result.data.holders;
       })
       .then(rowData => {
-        axios(`https://api.ethplorer.io/getAddressInfo/${this.props.token}?apiKey=freekey`)
+        axios(`https://api.ethplorer.io/getTokenInfo/${this.props.token}?apiKey=freekey`)
           .then(result => {
             rowData.forEach((item, index) => {
               item.number = index + 1;
             });
-            const total = 'tokens' in result.data ? result.data.tokens[0].tokenInfo.totalSupply : result.data.tokenInfo.totalSupply;
-            this.setState({ rowData: rowData, totalSupply: total});
+            if('error' in result.data) {
+              axios(`https://api.ethplorer.io/getAddressInfo/${this.props.token}?apiKey=freekey`)
+                .then(response => {
+                  const total = 'tokens' in response.data ? response.data.tokens[0].tokenInfo.totalSupply : response.data.tokenInfo.totalSupply;
+                  this.setState({ rowData: rowData, totalSupply: total});
+                })
+            } else {
+              this.setState({ rowData: rowData, totalSupply: result.data.totalSupply});
+            }
           })
           .catch(err => err)
       })
@@ -43,12 +50,6 @@ class ModalHolders extends Component {
           filter: true,
           width: 450
         },
-        // {
-        //   headerName: "Balance",
-        //   field: "balance",
-        //   sortable: true,
-        //   filter: true
-        // },
         {
           headerName: "Quantity",
           field: "balance",
@@ -56,13 +57,8 @@ class ModalHolders extends Component {
           filter: true,
           cellRenderer: params => {
             if (params.data.balance) {
-              let balance = params.data.balance.toString().split('');
-              let value = '';
-              for(let i = 0; i < balance.indexOf('e'); i++) {
-                value += balance[i];
-              }
               let span = document.createElement("span");
-              span.innerText = ((+value) * 1000000).toString();
+              span.innerText = (params.data.balance).toString();
 
               return span;
             }
@@ -74,7 +70,7 @@ class ModalHolders extends Component {
           sortable: true,
           filter: true,
           cellRenderer: params => {
-            if (params.data.balance) {
+            if (this.state.totalSupply) {
               let span = document.createElement("span");
               span.innerText = ((params.data.balance * 100) / this.state.totalSupply).toFixed(4) + '%';
               return span;
@@ -130,7 +126,7 @@ class ModalHolders extends Component {
       divStyle,
       start
     } = this.state;
-    
+
     return (
       <div style={divStyle}>
         <AgGridReact
