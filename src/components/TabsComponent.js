@@ -3,6 +3,7 @@ import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import Currencies from './Currencies/Currencies';
 import Exchanges from './Exchanges/Exchanges';
 import Transactions from './Transactions/Transactions';
+import ExchangesTagAddress from './ExchangesTagAddress/ExchangesTagAddress';
 import 'react-tabs/style/react-tabs.css';
 
 class TabsComponent extends Component {
@@ -12,6 +13,7 @@ class TabsComponent extends Component {
         <TabList>
           <Tab>Currencies</Tab>
           <Tab>Exchanges</Tab>
+          <Tab>Exchanges Tag Address</Tab>
           <Tab>ICOs</Tab>
           <Tab>Teams</Tab>
           <Tab>News</Tab>
@@ -19,10 +21,13 @@ class TabsComponent extends Component {
         </TabList>
 
         <TabPanel>
-          <Currencies/>
+          <Currencies />
         </TabPanel>
         <TabPanel>
-          <Exchanges/>
+          <Exchanges />
+        </TabPanel>
+        <TabPanel>
+          <ExchangesTagAddress />
         </TabPanel>
         <TabPanel>
           <h2>ICOs component</h2>
