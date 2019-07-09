@@ -66,7 +66,7 @@ class ModalHolders extends Component {
         },
         {
           headerName: "Percentage",
-          field: "balance",
+          field: "share",
           sortable: true,
           filter: true,
           cellRenderer: params => {

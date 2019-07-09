@@ -37,22 +37,28 @@ class ExchangesTagAddress extends Component {
           filter: true,
           width: 150,
         },
-        {
-          headerName: "Balance",
-          field: "balance",
-          sortable: true,
-          filter: true,
-          width: 150,
-          cellRenderer: params => shortValue(params.data.balance)
-        },
-        {
-          headerName: "Txn Count",
-          field: "count_txn",
-          sortable: true,
-          filter: true,
-          width: 150,
-          cellRenderer: params => shortValue(params.data.count_txn)
-        },
+        // {
+        //   headerName: "Blockchain",
+        //   field: "tag",
+        //   sortable: true,
+        //   filter: true,
+        // },
+        // {
+        //   headerName: "Balance",
+        //   field: "balance",
+        //   sortable: true,
+        //   filter: true,
+        //   width: 150,
+        //   cellRenderer: params => shortValue(params.data.balance)
+        // },
+        // {
+        //   headerName: "Txn Count",
+        //   field: "count_txn",
+        //   sortable: true,
+        //   filter: true,
+        //   width: 150,
+        //   cellRenderer: params => shortValue(params.data.count_txn)
+        // },
       ],
       rowData: [],
       modalIsOpenTwitter: false,
